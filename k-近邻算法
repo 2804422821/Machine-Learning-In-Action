@@ -2,7 +2,6 @@ from numpy import *
 import operator
 from os import listdir
 
-
 def classify0(inX, dataSet, labels, k):  # 分类函数，参数为输入向量，训练数据向量集合，标签向量集合，距离输入向量最近点的数目
     # 距离计算
     dataSize = dataSet.shape[0]  # 获取训练数据向量集合矩阵的行数
