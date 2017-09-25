@@ -1,1 +1,30 @@
+from numpy import *
+import operator
+from os import listdir
 
+
+def classify0(inX, dataSet, labels, k):  # 分类函数，参数为输入向量，训练数据向量集合，标签向量集合，距离输入向量最近点的数目
+    # 距离计算
+    dataSize = dataSet.shape[0]  # 获取训练数据向量集合矩阵的行数
+    diffMat = tile(inX, (dataSize, 1)) - dataSet  # tile()方法根据dataSet形状构造矩阵
+    sqDiffMat = diffMat ** 2
+    sqDistances = sqDiffMat.sum(axis=1)  # sum()方法计算矩阵行上的数据和
+    distances = sqDistances ** 0.5  # 距离列表
+    sortedDisIndices = distances.argsort()  # 对距离的大小值进行排序
+    classCount = {}  #
+    # 由小到大取出前k个值，并构造dic记录每个距离所对应标签出现的频率
+    for i in range(k):
+        votelLabel = labels[sortedDisIndices[i]]
+        classCount[votelLabel] = classCount.get(votelLabel, 0) + 1
+    # 对标签出现频率进行排序
+    sortedClassCount = sorted(classCount.items(), key=operator.itemgetter(1), reverse=True)
+    # 得到频率最高值所对应的标签
+    return sortedClassCount[0][0]
+
+
+# 创建训练数据集和标签向量集合
+def createDataSet():
+    group = array([[0, 0], [0, 0.1], [1.0, 1.0], [1.0, 1.1]])
+    labels = ['A', 'A', 'B', 'B']
+    return group, labels
+    
