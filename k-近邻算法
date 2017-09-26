@@ -20,10 +20,34 @@ def classify0(inX, dataSet, labels, k):  # 分类函数，参数为输入向量�
     # 得到频率最高值所对应的标签
     return sortedClassCount[0][0]
 
-
 # 创建训练数据集和标签向量集合
 def createDataSet():
     group = array([[0, 0], [0, 0.1], [1.0, 1.0], [1.0, 1.1]])
     labels = ['A', 'A', 'B', 'B']
     return group, labels
+    
+#文本记录数据集解析程序
+def file2Matrix(fileName):
+    #读取文本文件，构造数据集矩阵，标签向量集合
+    fr = open(fileName)
+    arrayOfLines = fr.readlines()
+    numberOfLines = len(arrayOfLines)
+    returnMat = zeros((numberOfLines, 3))     #zero()方法根据形状返回矩阵
+    classLabelVector = []
+    index = 0
+    for line in arrayOfLines:
+        line = line.strip()
+        listFromLine = line.split('\t')      #split()方法，根据字符串中的函数参数划分成列表元素，并返回这个列表
+        returnMat[index,:] = listFromLine[0:3]     #将listFromLine的前3个特征值元素传给returnMat
+        # 将listFromLine的最后一个特征值元素(标签)传给classLabelVector，并将最后一个特征值转化为整数型处理
+        label = 0
+        if listFromLine[-1] == 'didntLike':
+            label = 1
+        elif listFromLine[-1] == 'smallDoses':
+            label = 2
+        else:
+            label = 3
+        classLabelVector.append(label)
+        index += 1
+    return returnMat, classLabelVector
     
