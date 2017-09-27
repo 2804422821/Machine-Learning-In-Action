@@ -51,3 +51,15 @@ def file2Matrix(fileName):
         index += 1
     return returnMat, classLabelVector
     
+#归一化特征值，为了减少某个特征值的数值带来的影响
+def autoNorm(dataSet):
+    #计算矩阵行的和或列的最大值和最小值
+    minVals = dataSet.min(0)
+    maxVals = dataSet.max(0)
+    #归一化特征值公式，(vals - minVals)/(maxVals - minVals)
+    ranges = maxVals - minVals
+    normDataSet = zeros(shape(dataSet))
+    m = normDataSet.shape[0]
+    normDataSet = dataSet - tile(minVals, (m,1))
+    normDataSet = normDataSet / tile(ranges, (m,1))
+    return normDataSet, ranges, minVals
