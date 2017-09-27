@@ -1,3 +1,4 @@
+
 from numpy import *
 import operator
 from os import listdir
@@ -63,3 +64,21 @@ def autoNorm(dataSet):
     normDataSet = dataSet - tile(minVals, (m,1))
     normDataSet = normDataSet / tile(ranges, (m,1))
     return normDataSet, ranges, minVals
+
+#分类器测试代码
+def datingClassTest():
+    hoRatio = 0.5     #选择数据样本中，数据集和输入向量所占比
+    dataMat, dataLabel = file2Matrix('datingTestSet.txt')
+    normMat, ranges, minVals = autoNorm(dataMat)
+    m = normMat.shape[0]
+    numTestVecs = int(m*hoRatio)
+    errorCount = 0.
+    #输入向量集合中的每个单位进行分类，并与之对应的标签进行比较，计算出总体上的算法正确率
+    for i in range(numTestVecs):
+        classifierResult = classify0(normMat[i,:], normMat[numTestVecs:m,:], dataLabel[numTestVecs:m], 3)
+        print('the classifier came back with: %d, the real answer is: %d' %(classifierResult, dataLabel[i]))
+        #记录出错的数据
+        if classifierResult != dataLabel[i]:
+            errorCount += 1.0
+    print('the total error rate is: %f' %(errorCount/float(numTestVecs)))
+    print(errorCount)
